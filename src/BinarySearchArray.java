@@ -19,28 +19,13 @@ import java.util.List;
 public class BinarySearchArray {
 
     /*
-     * data:
-     * the array that stores the keys in sorted order.
-     *
-     * size:
-     * how many positions currently contain valid keys.
-     * Valid keys live only in data[0] ... data[size - 1].
+     * @param data: the array that stores the keys in sorted order.
+     * @param size: how many positions currently contain valid keys.
      */
     private final int[] data;
     private int size;
 
-    /*
-     * Measurements required by the assignment.
-     *
-     * time:
-     * execution time of the last operation.
-     *
-     * comparisons:
-     * comparison-style work of the last operation.
-     *
-     * levels:
-     * for this structure, we count how many array cells we accessed.
-     */
+     // Measurements required by the assignment.
     public long time;
     public int comparisons;
     public int levels;

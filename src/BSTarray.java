@@ -2,8 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * BSTarray
- * --------
+ * @class BSTarray
  * This class implements a Binary Search Tree (BST), but instead of using
  * node objects with pointers/references, it stores the whole tree inside
  * one fixed-size 2D array.
