@@ -6,23 +6,6 @@ import java.util.List;
  * -----------------
  * This class implements the third structure from the assignment:
  * a one-dimensional sorted array of unique keys.
- *
- * This is NOT a tree.
- * There are no nodes, no left children, and no right children.
- * The whole structure is simply one array that is always kept sorted.
- *
- * Why keep the array sorted?
- * Because once the keys are in ascending order, we can use binary search.
- * Binary search is much faster than linear search for lookup operations.
- *
- * The tradeoff is:
- * - search is fast, because binary search cuts the search interval in half
- * - insert is slower, because we may need to shift elements to keep sorting
- * - delete is also slower, because we may need to shift elements left
- *
- * So conceptually:
- * - BST versions organize data by parent/child relationships
- * - BinarySearchArray organizes data by sorted position in one array
  */
 public class BinarySearchArray {
 
@@ -131,7 +114,6 @@ public class BinarySearchArray {
         int position = binarySearchPosition(key);
 
         // If position >= 0, the key already exists.
-        
         if (position >= 0) {
             this.time = System.nanoTime() - startTime;
             return;
@@ -146,7 +128,6 @@ public class BinarySearchArray {
         }
 
         // Recover the true insertion point from the negative return value.
-        
         int insertionPoint = -(position + 1);
 
         
