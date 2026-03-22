@@ -422,7 +422,7 @@ public class BSTarray {
     }
 
     /*
-     * @func printName()
+     * @func printName
      * It prints the name of this data structure implementation.
      */
     public void printName() {
