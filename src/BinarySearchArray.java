@@ -1,122 +1,95 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /*
  * BinarySearchArray
  * -----------------
- * This class implements the third structure from the assignment:
- * a one-dimensional sorted array of unique integer keys.
+ * This class stores unique keys inside one sorted 1D array.
  *
- * Main idea:
- * - the array is always kept sorted
- * - search is done with binary search
- * - insert first finds the correct position, then shifts elements right
- * - delete first finds the key, then shifts elements left
- * - range search finds the first valid key and then scans forward
+ * Because the array is always sorted:
+ * - search can use binary search
+ * - insert must keep the order by shifting elements right
+ * - delete must keep the order by shifting elements left
  *
- * This structure is different from the two BSTs:
- * - it does not have left/right children
- * - it does not need inorder(), because the array is already sorted
- *
- * Tradeoff:
- * - search is fast: O(log n)
- * - insert/delete are slower: O(n), because shifting may be needed
+ * This is simpler than a tree because there are no nodes and no child links.
+ * The whole structure is just:
+ * - one array
+ * - one size variable
  */
 public class BinarySearchArray {
 
     /*
-     * A small default capacity so the class can be created even if
-     * no initial size is provided.
-     */
-    private static final int DEFAULT_CAPACITY = 16;
-
-    /*
      * data:
-     * the sorted array that holds the keys.
+     * the array that stores the keys in sorted order.
      *
      * size:
-     * how many positions are currently used.
-     * Only data[0] to data[size - 1] contain valid keys.
-     *
-     * time, comparisons, levels:
-     * measurements required by the assignment.
-     *
-     * For this structure, "levels" are interpreted as how many array cells
-     * we accessed while completing an operation.
+     * how many positions currently contain valid keys.
+     * Valid keys live only in data[0] ... data[size - 1].
      */
-    private int[] data;
+    private final int[] data;
     private int size;
 
+    /*
+     * Measurements required by the assignment.
+     *
+     * time:
+     * execution time of the last operation.
+     *
+     * comparisons:
+     * comparison-style work of the last operation.
+     *
+     * levels:
+     * for this structure, we count how many array cells we accessed.
+     */
     public long time;
     public int comparisons;
     public int levels;
 
     /*
-     * Creates an empty structure with a default capacity.
-     */
-    public BinarySearchArray() {
-        this(DEFAULT_CAPACITY);
-    }
-
-    /*
-     * Creates an empty structure with a chosen initial capacity.
-     * This is useful for experiments, because a larger initial capacity
-     * reduces the chance of resizing during measurements.
-     */
-    public BinarySearchArray(int initialCapacity) {
-        int safeCapacity = Math.max(1, initialCapacity);
-        this.data = new int[safeCapacity];
-        this.size = 0;
-    }
-
-    /*
-     * ensureCapacity(minCapacity)
-     * ---------------------------
-     * If the backing array is too small, create a larger one.
+     * Creates an empty sorted array structure with fixed capacity.
      *
-     * This does not change the logical structure of the sorted array.
-     * It only gives us more physical space to store future keys.
+     * This version is intentionally simple:
+     * the array does not grow automatically.
+     * So the caller should create it with enough space for the experiment.
      */
-    private void ensureCapacity(int minCapacity) {
-        if (minCapacity <= data.length) {
-            return;
+    public BinarySearchArray(int capacity) {
+        if (capacity < 1) {
+            capacity = 1;
         }
 
-        int newCapacity = Math.max(data.length * 2, minCapacity);
-        data = Arrays.copyOf(data, newCapacity);
+        this.data = new int[capacity];
+        this.size = 0;
     }
 
     /*
      * binarySearchPosition(key)
      * -------------------------
-     * Classic binary search over the used portion of the sorted array.
+     * Binary search on the used part of the sorted array.
      *
      * Returns:
-     * - index >= 0 if the key is found
+     * - index >= 0 if the key exists
      * - otherwise -(insertionPoint + 1)
      *
-     * This is the same convention used by Java's Arrays.binarySearch().
-     * It is convenient because one helper can serve search, insert, and delete.
+     * This is useful because the same helper can support:
+     * - search
+     * - insert
+     * - delete
      */
     private int binarySearchPosition(int key) {
         int low = 0;
         int high = size - 1;
 
         while (low <= high) {
-            int mid = low + (high - low) / 2;
+            int mid = (low + high) / 2;
 
-            /*
-             * We accessed one array cell: data[mid].
-             */
-            levels++;
+            this.levels++;
 
-            comparisons++;
+            this.comparisons++;
             if (data[mid] == key) {
                 return mid;
             }
 
-            comparisons++;
+            this.comparisons++;
             if (data[mid] < key) {
                 low = mid + 1;
             } else {
@@ -133,18 +106,18 @@ public class BinarySearchArray {
      * Returns the first index whose value is >= key.
      *
      * This is useful for range search:
-     * once we find the first possible value in range, we can scan forward
-     * until values become too large.
+     * after finding the first possible value in range,
+     * we can scan forward until values become too large.
      */
     private int lowerBound(int key) {
         int low = 0;
         int high = size;
 
         while (low < high) {
-            int mid = low + (high - low) / 2;
+            int mid = (low + high) / 2;
 
-            levels++;
-            comparisons++;
+            this.levels++;
+            this.comparisons++;
             if (data[mid] < key) {
                 low = mid + 1;
             } else {
@@ -158,14 +131,14 @@ public class BinarySearchArray {
     /*
      * insert(key)
      * -----------
-     * Keeps the array sorted at all times.
+     * Keeps the array sorted after insertion.
      *
      * Steps:
-     * 1. Use binary search to see if the key already exists.
-     * 2. If it exists, do nothing.
-     * 3. Otherwise find the insertion point.
-     * 4. Shift all larger elements one position to the right.
-     * 5. Store the key in the new gap.
+     * 1. Search for the key with binary search.
+     * 2. If it already exists, do nothing.
+     * 3. If the array is full, do nothing.
+     * 4. Shift larger elements one step right.
+     * 5. Put the key in the free position.
      */
     public void insert(int key) {
         long startTime = System.nanoTime();
@@ -174,28 +147,25 @@ public class BinarySearchArray {
 
         int position = binarySearchPosition(key);
         if (position >= 0) {
-            /*
-             * The assignment wants unique keys, so duplicates are ignored.
-             */
+            this.time = System.nanoTime() - startTime;
+            return;
+        }
+
+        if (this.size == this.data.length) {
             this.time = System.nanoTime() - startTime;
             return;
         }
 
         int insertionPoint = -(position + 1);
-        ensureCapacity(size + 1);
 
-        /*
-         * Shift every larger element one step to the right
-         * to open space for the new key.
-         */
-        for (int i = size; i > insertionPoint; i--) {
-            data[i] = data[i - 1];
-            levels++;
+        for (int i = this.size; i > insertionPoint; i--) {
+            this.data[i] = this.data[i - 1];
+            this.levels++;
         }
 
-        data[insertionPoint] = key;
-        levels++;
-        size++;
+        this.data[insertionPoint] = key;
+        this.levels++;
+        this.size++;
 
         this.time = System.nanoTime() - startTime;
     }
@@ -203,11 +173,9 @@ public class BinarySearchArray {
     /*
      * search(key)
      * -----------
-     * Uses binary search because the array is sorted.
+     * Binary search because the array is sorted.
      *
-     * Returns:
-     * - the key itself if found
-     * - -1 if not found
+     * Returns the key if found, otherwise -1.
      */
     public int search(int key) {
         long startTime = System.nanoTime();
@@ -218,7 +186,7 @@ public class BinarySearchArray {
         this.time = System.nanoTime() - startTime;
 
         if (position >= 0) {
-            return data[position];
+            return this.data[position];
         }
 
         return -1;
@@ -230,9 +198,9 @@ public class BinarySearchArray {
      * Deletes the key if it exists.
      *
      * Steps:
-     * 1. Use binary search to locate the key.
-     * 2. If it is not found, return false.
-     * 3. Otherwise shift all later elements one step left.
+     * 1. Find the key with binary search.
+     * 2. If it does not exist, return false.
+     * 3. Shift later elements one step left.
      * 4. Decrease size.
      */
     public boolean delete(int key) {
@@ -246,15 +214,13 @@ public class BinarySearchArray {
             return false;
         }
 
-        for (int i = position; i < size - 1; i++) {
-            data[i] = data[i + 1];
-            levels++;
+        for (int i = position; i < this.size - 1; i++) {
+            this.data[i] = this.data[i + 1];
+            this.levels++;
         }
 
-        if (size > 0) {
-            data[size - 1] = 0;
-        }
-        size--;
+        this.data[this.size - 1] = 0;
+        this.size--;
 
         this.time = System.nanoTime() - startTime;
         return true;
@@ -266,9 +232,9 @@ public class BinarySearchArray {
      * Returns all keys x such that:
      * low <= x <= high
      *
-     * Since the array is sorted, we do not need to scan from the beginning.
-     * We first find the first index whose value is >= low.
-     * Then we move forward until values become larger than high.
+     * Because the array is sorted:
+     * - first find the first possible position with lowerBound(low)
+     * - then move right until values become bigger than high
      */
     public List<Integer> rangeSearch(int low, int high) {
         long startTime = System.nanoTime();
@@ -278,14 +244,14 @@ public class BinarySearchArray {
         List<Integer> result = new ArrayList<>();
         int index = lowerBound(low);
 
-        while (index < size) {
-            levels++;
-            comparisons++;
-            if (data[index] > high) {
+        while (index < this.size) {
+            this.levels++;
+            this.comparisons++;
+            if (this.data[index] > high) {
                 break;
             }
 
-            result.add(data[index]);
+            result.add(this.data[index]);
             index++;
         }
 
@@ -294,7 +260,9 @@ public class BinarySearchArray {
     }
 
     /*
-     * Small helper requested by the assignment.
+     * printName()
+     * -----------
+     * Helper required by the assignment.
      */
     public void printName() {
         System.out.println("Binary Search");

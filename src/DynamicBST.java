@@ -13,6 +13,8 @@ import java.util.List;
 
 public class DynamicBST {
     public DynamicBSTNode root;
+    
+    // Metrics to compare
     public long time;
     public int comparisons;
     public int levels;
@@ -48,7 +50,7 @@ public class DynamicBST {
         DynamicBSTNode current = root;
         DynamicBSTNode parent = null;
 
-        // We then recure down the tree to find the right position
+        // We then recur down the tree to find the right position
         while (current != null){
             this.levels++;
             parent = current;   // We keep the parent as the last, non-null node
@@ -60,6 +62,7 @@ public class DynamicBST {
                 return;
             }
 
+            // Now we check if the key is smaller than the current
             if (key < current.key){
                 current = current.left; // Obviously, we go to the left
             } else{
@@ -103,6 +106,8 @@ public class DynamicBST {
         DynamicBSTNode current = root;
 
         while(current != null){
+
+            // We visited one more node while following the search path.
             this.levels++;
             this.comparisons++;
             // If we find the key, we just return it
@@ -120,7 +125,7 @@ public class DynamicBST {
             }
         }
         
-        // If we get to here, we did not find the key, thus return error
+        // If we get to here, we fell off the tree, thus return error
         this.time = System.nanoTime() - startTime;
         return -1;
     }
@@ -194,7 +199,8 @@ public class DynamicBST {
             DynamicBSTNode successor = current.right;
 
 
-            // We find the in-order successor (the one on the left in the right subtree)
+            // We find the in-order successor 
+            // (the leftmost in the right subtree)
             while (successor.left != null) {
                 this.levels++;
                 pSuccessor = successor;
@@ -243,7 +249,7 @@ public class DynamicBST {
     */
     private void findInRange(List<Integer> result, DynamicBSTNode node, int low, int high){
         
-        /*We start on an empty node
+        /* We start on an empty node
         * If true, we return nothing
         * If false, we start the proccess to look for the keys
         */
@@ -284,6 +290,7 @@ public class DynamicBST {
 
     /* @func inorder
     * This function just prints the keys
+    * in ascending order
     */
     public void inorder(DynamicBSTNode subroot){
         // If the root is empty, then the tree is empty so do nothing
@@ -298,7 +305,10 @@ public class DynamicBST {
     }
 
 
-    // Used in main, to show the start of said tree
+    /*
+     * @func printName()
+     * It prints the name of this data structure implementation.
+     */
     public void printName() {
         System.out.println("BST with Dynamic Memory Allocation");
     }
