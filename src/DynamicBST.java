@@ -15,6 +15,7 @@ public class DynamicBST {
     public DynamicBSTNode root;
     public long time;
     public int comparisons;
+    public int levels;
 
     public DynamicBST(){
         this.root = null;
@@ -33,11 +34,13 @@ public class DynamicBST {
         // These variables are for the measurements asked in this assignment
         long startTime = System.nanoTime(); // Time starting
         this.comparisons = 0;
+        this.levels = 0;
 
 
         // If the tree is empty, we create a new root and stop
         if (this.root == null){
             this.root = new DynamicBSTNode(key);
+            this.levels = 1;
             this.time = System.nanoTime() - startTime; // Time ending
             return;
         }
@@ -47,6 +50,7 @@ public class DynamicBST {
 
         // We then recure down the tree to find the right position
         while (current != null){
+            this.levels++;
             parent = current;   // We keep the parent as the last, non-null node
             this.comparisons++; // +1 comparisons
 
@@ -89,6 +93,7 @@ public class DynamicBST {
 
         long startTime = System.nanoTime();
         this.comparisons = 0;
+        this.levels = 0;
         // if the tree is empty return error
         if (root == null){
             this.time = System.nanoTime() - startTime;
@@ -98,6 +103,7 @@ public class DynamicBST {
         DynamicBSTNode current = root;
 
         while(current != null){
+            this.levels++;
             this.comparisons++;
             // If we find the key, we just return it
             if (key == current.key){
@@ -133,10 +139,12 @@ public class DynamicBST {
         DynamicBSTNode nextNode = null;
         long startTime = System.nanoTime();
         this.comparisons = 0;
+        this.levels = 0;
 
         // Firstly, search for the node and its parent
         while (current != null && current.key != key){
             
+            this.levels++;
             this.comparisons++;
             parent = current;
 
@@ -154,6 +162,8 @@ public class DynamicBST {
             this.time = System.nanoTime() - startTime;
             return false;
         }
+
+        this.levels++;
 
 
         // If the node has a maximum of one child, so 0 or 1
@@ -186,6 +196,7 @@ public class DynamicBST {
 
             // We find the in-order successor (the one on the left in the right subtree)
             while (successor.left != null) {
+                this.levels++;
                 pSuccessor = successor;
                 successor = successor.left;
             }
@@ -212,6 +223,7 @@ public class DynamicBST {
     public List<Integer> rangeSearch(int low, int high){
         long startTime = System.nanoTime();
         this.comparisons = 0;
+        this.levels = 0;
         List<Integer> result = new ArrayList<>();
         
         // we will be using another function to help us do everything
@@ -239,6 +251,7 @@ public class DynamicBST {
             return;
         }
 
+        this.levels++;
         this.comparisons++;
 
         /* If the key is higher than the value we set as low,
@@ -282,5 +295,11 @@ public class DynamicBST {
         System.out.print(subroot.key + " ");
         inorder(subroot.right);
 
+    }
+
+
+    // Used in main, to show the start of said tree
+    public void printName() {
+        System.out.println("BST with Dynamic Memory Allocation");
     }
 }
