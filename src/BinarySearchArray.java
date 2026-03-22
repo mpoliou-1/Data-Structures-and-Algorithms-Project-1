@@ -7,7 +7,7 @@ import java.util.List;
  * This class implements the third structure from the assignment:
  * a one-dimensional sorted array of unique keys.
  */
-public class BinarySearchArray {
+public class BinarySearchArray implements SearchStructure {
 
     /*
      * @param data: the actual array that stores the keys.

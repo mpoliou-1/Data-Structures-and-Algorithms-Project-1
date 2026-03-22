@@ -17,14 +17,14 @@ import java.util.List;
  * tree[2][i] -> index of the right child of node i
  *
  */
-public class BSTarray {
+public class BSTarray implements SearchStructure {
 
     /* Constants we use instead of raw numbers 0, 1, 2
     * for key, left, and right
     */
-    private static final int key = 0;
-    private static final int left = 1;
-    private static final int right = 2;
+    private static final int KEY = 0;
+    private static final int LEFT = 1;
+    private static final int RIGHT = 2;
 
 
     private final int[][] tree;
@@ -51,17 +51,17 @@ public class BSTarray {
         for (int i = 0; i < k; i++) {
             
             // key is initialized to 0 just as a default value.
-            tree[key][i] = 0;
+            tree[KEY][i] = 0;
 
             
             // left starts as -1 because free rows do not have children.
-            tree[left][i] = -1;
+            tree[LEFT][i] = -1;
 
             //right is used here to build the free-list.
             if (i == k - 1) {
-                tree[right][i] = -1;
+                tree[RIGHT][i] = -1;
 }           else {
-                tree[right][i] = i + 1;
+                tree[RIGHT][i] = i + 1;
             }
 
         }
@@ -82,11 +82,11 @@ public class BSTarray {
         int freeRow = avail;
 
         // We move avail to the next free slot.
-        avail = tree[right][freeRow];
+        avail = tree[RIGHT][freeRow];
 
         // left and right children start as empty thus -1.
-        tree[left][freeRow] = -1;
-        tree[right][freeRow] = -1;
+        tree[LEFT][freeRow] = -1;
+        tree[RIGHT][freeRow] = -1;
 
         return freeRow;
     }
@@ -97,9 +97,9 @@ public class BSTarray {
      * This is the array-version of "deallocate the deleted node".
      */
     private void freeNode(int line) {
-        tree[key][line] = 0;
-        tree[left][line] = -1;
-        tree[right][line] = avail;
+        tree[KEY][line] = 0;
+        tree[LEFT][line] = -1;
+        tree[RIGHT][line] = avail;
         avail = line;
     }
 
@@ -123,7 +123,7 @@ public class BSTarray {
                 return;
             }
 
-            tree[key][newRow] = key;
+            tree[KEY][newRow] = key;
             root = newRow;
 
             this.levels++;
@@ -145,7 +145,7 @@ public class BSTarray {
             // Check whether the key already exists.
             // If it does, we do nothing(return).
             this.comparisons++;
-            if (key == tree[key][current]) {
+            if (key == tree[KEY][current]) {
                 this.time = System.nanoTime() - startTime;
                 return;
             }
@@ -154,10 +154,10 @@ public class BSTarray {
             // If the new key is smaller, we go to the left child.
             // Otherwise we go to the right child.
             this.comparisons++;
-            if (key < tree[key][current]) {
-                current = tree[left][current];
+            if (key < tree[KEY][current]) {
+                current = tree[LEFT][current];
             } else {
-                current = tree[right][current];
+                current = tree[RIGHT][current];
             }
         }
 
@@ -172,14 +172,14 @@ public class BSTarray {
             return;
         }
 
-        tree[key][newRow] = key;
+        tree[KEY][newRow] = key;
 
         // Now link the new node to its parent.
         this.comparisons++;
-        if (key < tree[key][parent]) {
-            tree[left][parent] = newRow;
+        if (key < tree[KEY][parent]) {
+            tree[LEFT][parent] = newRow;
         } else {
-            tree[right][parent] = newRow;
+            tree[RIGHT][parent] = newRow;
         }
 
         this.time = System.nanoTime() - startTime;
@@ -206,17 +206,17 @@ public class BSTarray {
             this.levels++;
             this.comparisons++;
             // If we find the key, we just return it
-            if (key == tree[key][current]) {
+            if (key == tree[KEY][current]) {
                 this.time = System.nanoTime() - startTime;
-                return tree[key][current];
+                return tree[KEY][current];
             }
 
             // Then we go down the tree and choose sides
             this.comparisons++;
-            if (key < tree[key][current]) {
-                current = tree[left][current];
+            if (key < tree[KEY][current]) {
+                current = tree[LEFT][current];
             } else {
-                current = tree[right][current];
+                current = tree[RIGHT][current];
             }
         }
 
@@ -250,17 +250,17 @@ public class BSTarray {
             this.levels++;
 
             this.comparisons++;
-            if (key == tree[key][current]) {
+            if (key == tree[KEY][current]) {
                 break;
             }
 
             parent = current;
 
             this.comparisons++;
-            if (key < tree[key][current]) {
-                current = tree[left][current];
+            if (key < tree[KEY][current]) {
+                current = tree[LEFT][current];
             } else {
-                current = tree[right][current];
+                current = tree[RIGHT][current];
             }
         }
 
@@ -272,16 +272,16 @@ public class BSTarray {
         }
 
         // If the node has a maximum of one child, so 0 or 1
-        if (tree[left][current] == -1 || tree[right][current] == -1) {
-            int child = (tree[left][current] != -1) ? tree[left][current] : tree[right][current];
+        if (tree[LEFT][current] == -1 || tree[RIGHT][current] == -1) {
+            int child = (tree[LEFT][current] != -1) ? tree[LEFT][current] : tree[RIGHT][current];
 
             // If we delete the root
             if (parent == -1) {
                 root = child;
-            } else if (tree[left][parent] == current) {
-                tree[left][parent] = child;
+            } else if (tree[LEFT][parent] == current) {
+                tree[LEFT][parent] = child;
             } else {
-                tree[right][parent] = child;
+                tree[RIGHT][parent] = child;
             }
 
             // The old slot is not used, we recycle it through the free-list
@@ -292,27 +292,27 @@ public class BSTarray {
 
         // If the node has 2 children
         int successorParent = current;
-        int successor = tree[right][current];
+        int successor = tree[RIGHT][current];
 
         this.levels++;
 
         // We find the in-order successor 
         // (the leftmost one in the right subtree)
-        while (tree[left][successor] != -1) {
+        while (tree[LEFT][successor] != -1) {
             successorParent = successor;
-            successor = tree[left][successor];
+            successor = tree[LEFT][successor];
             this.levels++;
         }
 
         // We replace the value of the current node with the successor
-        tree[key][current] = tree[key][successor];
+        tree[KEY][current] = tree[KEY][successor];
 
         // We delete the successor who now has a maximum of 1 child
-        int successorChild = tree[right][successor];
+        int successorChild = tree[RIGHT][successor];
         if (successorParent == current) {
-            tree[right][successorParent] = successorChild;
+            tree[RIGHT][successorParent] = successorChild;
         } else {
-            tree[left][successorParent] = successorChild;
+            tree[LEFT][successorParent] = successorChild;
         }
 
         
@@ -362,16 +362,16 @@ public class BSTarray {
         * there might be keys to look for 
         * on the left subtree
         */
-        if (tree[key][nodeIndex] > low) {
-            findInRange(tree[left][nodeIndex], low, high, result);
+        if (tree[KEY][nodeIndex] > low) {
+            findInRange(tree[LEFT][nodeIndex], low, high, result);
         }
 
         /* Checking if the current node is between the values we set
         * If true, we add it to the result list
         */
         this.comparisons += 2;
-        if (tree[key][nodeIndex] >= low && tree[key][nodeIndex] <= high) {
-            result.add(tree[key][nodeIndex]);
+        if (tree[KEY][nodeIndex] >= low && tree[KEY][nodeIndex] <= high) {
+            result.add(tree[KEY][nodeIndex]);
         }
 
         this.comparisons++;
@@ -379,11 +379,11 @@ public class BSTarray {
         * there might be keys to look for 
         * on the right subtree
         */
-        if (tree[key][nodeIndex] < high) {
+        if (tree[KEY][nodeIndex] < high) {
             /*
              * Only then can the right subtree still contain values inside the range.
              */
-            findInRange(tree[right][nodeIndex], low, high, result);
+            findInRange(tree[RIGHT][nodeIndex], low, high, result);
         }
     }
 
@@ -413,12 +413,12 @@ public class BSTarray {
         }
 
         // First print all smaller keys,
-        buildInorder(tree[left][nodeIndex], builder);
+        buildInorder(tree[LEFT][nodeIndex], builder);
 
-        builder.append(tree[key][nodeIndex]).append(' ');
+        builder.append(tree[KEY][nodeIndex]).append(' ');
 
         // then all larger keys.
-        buildInorder(tree[right][nodeIndex], builder);
+        buildInorder(tree[RIGHT][nodeIndex], builder);
     }
 
     /*

@@ -11,7 +11,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class DynamicBST {
+public class DynamicBST implements SearchStructure {
     public DynamicBSTNode root;
     
     // Metrics to compare
@@ -289,10 +289,19 @@ public class DynamicBST {
     }
 
     /* @func inorder
+    * Public version requested by the assignment.
+    * It starts the traversal from the root.
+    */
+    public void inorder(){
+        inorder(this.root);
+        System.out.println();
+    }
+
+    /* @func inorder
     * This function just prints the keys
     * in ascending order
     */
-    public void inorder(DynamicBSTNode subroot){
+    private void inorder(DynamicBSTNode subroot){
         // If the root is empty, then the tree is empty so do nothing
         if (subroot == null){
             return;
