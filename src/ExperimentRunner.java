@@ -3,9 +3,9 @@ import java.util.List;
 
 /*
  * ExperimentRunner
- * ----------------
- * Runs the full experimental part of the assignment.
  *
+ * Runs the experiments for every N provided
+ * 
  * For every required N value:
  * - create fresh structures
  * - generate N unique random keys
@@ -13,6 +13,10 @@ import java.util.List;
  * - print inorder for N = 30
  * - measure operations A, B, C, D
  * - store average comparisons, time, and levels
+ * 
+ * 
+ * Sources: We did not actually source this code from anywhere, we looked at what
+ * the assignment asked from us to do, and we built this class accordingly, with the help of AI
  */
 public class ExperimentRunner {
 
