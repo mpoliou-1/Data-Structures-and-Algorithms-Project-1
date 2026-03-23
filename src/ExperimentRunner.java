@@ -33,10 +33,10 @@ public class ExperimentRunner {
     }
 
     public void runAllExperiments() {
-        OperationTable insertTable = new OperationTable("Πράξη Α - Εισαγωγή");
-        OperationTable deleteTable = new OperationTable("Πράξη Β - Διαγραφή");
-        OperationTable searchTable = new OperationTable("Πράξη Γ - Αναζήτηση");
-        OperationTable rangeTable = new OperationTable("Πράξη Δ - Αναζήτηση Εύρους");
+        OperationTable insertTable = new OperationTable("Λειτουργία Α - Εισαγωγή");
+        OperationTable deleteTable = new OperationTable("Λειτουργία Β - Διαγραφή");
+        OperationTable searchTable = new OperationTable("Λειτουργία Γ - Αναζήτηση");
+        OperationTable rangeTable = new OperationTable("Λειτουργία Δ - Εύρος τιμών");
 
         for (int n : N_VALUES) {
             int repetitions = repetitionsFor(n);
