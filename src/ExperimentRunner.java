@@ -27,14 +27,12 @@ public class ExperimentRunner {
     }
 
     public void runAllExperiments() {
-        // Create all the tables for all the operations
-        OperationTable insertTable = new OperationTable("Operation A - Insert");
-        OperationTable deleteTable = new OperationTable("Operation B - Delete");
-        OperationTable searchTable = new OperationTable("Operation C - Search");
-        OperationTable rangeTable = new OperationTable("Operation D - Range Search");
+        OperationTable insertTable = new OperationTable("Πράξη Α - Εισαγωγή");
+        OperationTable deleteTable = new OperationTable("Πράξη Β - Διαγραφή");
+        OperationTable searchTable = new OperationTable("Πράξη Γ - Αναζήτηση");
+        OperationTable rangeTable = new OperationTable("Πράξη Δ - Αναζήτηση Εύρους");
 
         for (int n : N_VALUES) {
-            // 
             int repetitions = repetitionsFor(n);
             int maxValue = 2 * n;
 
@@ -61,7 +59,11 @@ public class ExperimentRunner {
         this.printer.printOperationTable(rangeTable);
     }
 
-    private void populateStructures(int[] keys, DynamicBST dynamicTree, BSTarray arrayTree, BinarySearchArray binaryArray) {
+    private void populateStructures(
+            int[] keys,
+            DynamicBST dynamicTree,
+            BSTarray arrayTree,
+            BinarySearchArray binaryArray) {
         for (int key : keys) {
             dynamicTree.insert(key);
             arrayTree.insert(key);
@@ -69,12 +71,6 @@ public class ExperimentRunner {
         }
     }
 
-    /* function: repetitionsFor
-     * Function that we use to see how many runs we are going to have
-     * returns k = 20 when n < 201
-     * k = 50 when 200 < n < 1000
-     * k = 100 when n > 1001 
-     */
     private int repetitionsFor(int n) {
         if (n < 201) {
             return 20;
@@ -87,12 +83,14 @@ public class ExperimentRunner {
         return 100;
     }
 
-    /*
-     * Measures one of the single-key operations:
-     * I = insert, D = delete, S = search
-     */
-    private TableRow measureSingleKeyOperation(int n, int repetitions, int maxValue,
-            DynamicBST dynamicTree, BSTarray arrayTree, BinarySearchArray binaryArray, char operation) {
+    private TableRow measureSingleKeyOperation(
+            int n,
+            int repetitions,
+            int maxValue,
+            DynamicBST dynamicTree,
+            BSTarray arrayTree,
+            BinarySearchArray binaryArray,
+            char operation) {
         int[] keys = this.generator.generateRandoms(repetitions, 1, maxValue);
 
         long dynamicTime = 0;
@@ -145,12 +143,16 @@ public class ExperimentRunner {
                 n,
                 average(dynamicComparisons, dynamicTime, dynamicLevels, repetitions),
                 average(arrayComparisons, arrayTime, arrayLevels, repetitions),
-                average(binaryComparisons, binaryTime, binaryLevels, repetitions)
-        );
+                average(binaryComparisons, binaryTime, binaryLevels, repetitions));
     }
 
-    private TableRow measureRangeSearch(int n, int repetitions, int maxValue,
-            DynamicBST dynamicTree, BSTarray arrayTree, BinarySearchArray binaryArray) {
+    private TableRow measureRangeSearch(
+            int n,
+            int repetitions,
+            int maxValue,
+            DynamicBST dynamicTree,
+            BSTarray arrayTree,
+            BinarySearchArray binaryArray) {
         long dynamicTime = 0;
         long dynamicComparisons = 0;
         long dynamicLevels = 0;
@@ -189,16 +191,14 @@ public class ExperimentRunner {
                 n,
                 average(dynamicComparisons, dynamicTime, dynamicLevels, repetitions),
                 average(arrayComparisons, arrayTime, arrayLevels, repetitions),
-                average(binaryComparisons, binaryTime, binaryLevels, repetitions)
-        );
+                average(binaryComparisons, binaryTime, binaryLevels, repetitions));
     }
 
     private Measurements average(long totalComparisons, long totalTime, long totalLevels, int repetitions) {
         return new Measurements(
                 (double) totalComparisons / repetitions,
                 (double) totalTime / repetitions,
-                (double) totalLevels / repetitions
-        );
+                (double) totalLevels / repetitions);
     }
 
     public static class Measurements {

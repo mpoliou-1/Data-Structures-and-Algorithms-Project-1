@@ -8,13 +8,15 @@ import java.util.Locale;
  */
 public class ResultsPrinter {
 
+    private static final Locale GREEK_LOCALE = Locale.forLanguageTag("el-GR");
+
     public void printInitialInorders(int n, DynamicBST dynamicTree, BSTarray arrayTree) {
         System.out.println("N = " + n);
 
-        System.out.print("Dynamic BST inorder: ");
+        System.out.print("Ενδοδιατεταγμένη διάσχιση Δυναμικού BST: ");
         dynamicTree.inorder();
 
-        System.out.print("BST Array inorder: ");
+        System.out.print("Ενδοδιατεταγμένη διάσχιση BST Πίνακα: ");
         arrayTree.inorder();
 
         System.out.println();
@@ -24,17 +26,17 @@ public class ResultsPrinter {
         System.out.println(table.title);
 
         System.out.printf(
-                Locale.US,
+                GREEK_LOCALE,
                 "%-8s %-12s %-12s %-12s %-12s %-12s %-12s %-12s %-12s %-12s%n",
                 "N",
-                "Dyn Ops", "Dyn Time", "Dyn Levels",
-                "Arr Ops", "Arr Time", "Arr Levels",
-                "Bin Ops", "Bin Time", "Bin Levels"
+                "Δυν Πράξ", "Δυν Χρ", "Δυν Επ",
+                "Πιν Πράξ", "Πιν Χρ", "Πιν Επ",
+                "Δυαδ Πράξ", "Δυαδ Χρ", "Δυαδ Επ"
         );
 
         for (ExperimentRunner.TableRow row : table.rows) {
             System.out.printf(
-                    Locale.US,
+                    GREEK_LOCALE,
                     "%-8d %-12.2f %-12.2f %-12.2f %-12.2f %-12.2f %-12.2f %-12.2f %-12.2f %-12.2f%n",
                     row.n,
                     row.dynamicTree.comparisons, row.dynamicTree.time, row.dynamicTree.levels,
