@@ -3,6 +3,7 @@
 * https://www.geeksforgeeks.org/dsa/binary-search-tree-set-1-search-and-insertion/
 * https://www.geeksforgeeks.org/dsa/deletion-in-binary-search-tree/
 * https://www.geeksforgeeks.org/dsa/insertion-in-binary-search-tree/
+* https://github.com/abhistranger/Dynamic-Memory-Allocator/blob/master/BSTree.java
 * 
 * We also used the slides provided from the class
 * It was then modified to suit our own source code for the assignment requirements

@@ -1,6 +1,7 @@
 /*
 * Source for the dynamic BST implementation :
 * https://www.geeksforgeeks.org/dsa/binary-search-tree-set-1-search-and-insertion/
+* * https://github.com/abhistranger/Dynamic-Memory-Allocator/blob/master/BSTree.java
 * 
 * It was then modified to suit our own source code for the assignment requirements
 *
