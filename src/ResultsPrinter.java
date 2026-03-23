@@ -13,10 +13,10 @@ public class ResultsPrinter {
     public void printInitialInorders(int n, DynamicBST dynamicTree, BSTarray arrayTree) {
         System.out.println("N = " + n);
 
-        System.out.print("Ενδοδιατεταγμένη διάσχιση Δυναμικού BST: ");
+        System.out.print("Δέντρο δυναμική παραχώρηση μνήμης, inorder διάσχιση: ");
         dynamicTree.inorder();
 
-        System.out.print("Ενδοδιατεταγμένη διάσχιση BST Πίνακα: ");
+        System.out.print("Δέντρο array, inorder διάσχιση: ");
         arrayTree.inorder();
 
         System.out.println();
