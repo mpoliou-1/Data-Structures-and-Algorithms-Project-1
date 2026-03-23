@@ -16,7 +16,9 @@ import java.util.List;
  * 
  * 
  * Sources: We did not actually source this code from anywhere, we looked at what
- * the assignment asked from us to do, and we built this class accordingly, with the help of AI
+ * the assignment asked from us to do, and a little help from AI.
+ * Also, we found experiment classes from the internet, and with the help of them all
+ * we build this class according to what we were asked to do.
  */
 public class ExperimentRunner {
 
