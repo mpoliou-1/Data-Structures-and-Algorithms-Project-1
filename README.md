@@ -1,6 +1,7 @@
 ## Project information
 # Data structures and algorithms project
-*** Binary trees tmplementation and comparison***
+** Binary trees tmplementation and comparison **
+==============================================
 
 
 #### In this project, we are asked to implement 3 different structures:
