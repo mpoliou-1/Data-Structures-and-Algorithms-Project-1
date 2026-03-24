@@ -10,6 +10,7 @@
 - Binary tree with the use of array
 - Binary search one-dimensional array with sorted keys
 
+----------------------------------------------
 
 - Our end goal is to compare the efficiency of the 3 structures in four
   different functions: insertion, deletion, search, and range search of keys.
