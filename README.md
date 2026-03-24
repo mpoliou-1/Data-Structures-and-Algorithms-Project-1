@@ -1,7 +1,7 @@
 ## Project information
 # Data structures and algorithms project
 
-==============================================\
+==============================================
 
 **Binary trees tmplementation and comparison**
 
