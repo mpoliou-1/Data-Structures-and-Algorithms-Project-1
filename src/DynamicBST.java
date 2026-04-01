@@ -199,6 +199,7 @@ public class DynamicBST implements SearchStructure {
             DynamicBSTNode pSuccessor = current;
             DynamicBSTNode successor = current.right;
 
+            this.levels++;
 
             // We find the in-order successor 
             // (the leftmost in the right subtree)
